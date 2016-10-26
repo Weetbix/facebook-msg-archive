@@ -83,3 +83,9 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+
+#####
+# Contains environmental keys 
+run_local.js
+output.json
