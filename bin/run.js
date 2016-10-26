@@ -22,7 +22,7 @@ function getAllMessages(api, userid, timestamp = null, messages = []){
             {
                 console.log( `saving [${messages.length}]` );
                 messages = [ ... newMessages, ... messages ];
-                return getAllMessages( api, userid, newMessages[0].timestamp, messages );
+                return getAllMessages( api, userid, newMessages[0].timestamp - 1, messages );
             } else {
                 return messages;
             }
