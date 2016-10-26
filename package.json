@@ -1,0 +1,38 @@
+{
+  "name": "facebook-msg-archive",
+  "version": "0.0.1",
+  "description": "Archive facebook messages to JSON",
+  "main": "bin/run.js",
+  "bin": {
+    "facebook-msg-archive": "run.js"
+  },
+  "dependencies": {
+    "facebook-chat-api": "^1.2.0",
+    "q": "^1.4.1"
+  },
+  "devDependencies": 
+  {
+    "eslint": "^3.8.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Weetbix/facebook-msg-archive.git"
+  },
+  "keywords": [
+    "facebook",
+    "message",
+    "msg",
+    "archive",
+    "messages",
+    "fb"
+  ],
+  "author": "John Hannagan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Weetbix/facebook-msg-archive/issues"
+  },
+  "homepage": "https://github.com/Weetbix/facebook-msg-archive#readme"
+}
