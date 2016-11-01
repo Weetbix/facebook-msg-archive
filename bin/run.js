@@ -1,13 +1,13 @@
-var facebookAPI = require("facebook-chat-api");
-var Q = require( "q" );
-var fs = require('fs');
+const fs = require('fs');
+const facebookAPI = require("facebook-chat-api");
+const Q = require( "q" );
 
-var Friends = require( '../lib/friends' );
-var Messages = require( '../lib/messages' );
+const Friends = require( '../lib/friends' );
+const Messages = require( '../lib/messages' );
 
 const OUTPUT_FILENAME = './output.json';
 
-var credentials = 
+const credentials = 
 {
     email :  process.env.FACEBOOK_EMAIL,
     password : process.env.FACEBOOK_PASSWORD
