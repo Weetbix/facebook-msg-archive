@@ -21,7 +21,7 @@ var credentials =
         let messages = await Messages.getAllMessages( api, friend.id );
 
         const formattedMessages = JSON.stringify( messages, null, 4 );
-        await Q.nfcall( fs.writeFile, OUTPUT_FILENAME, formattedMessages );
+        fs.writeFileSync( OUTPUT_FILENAME, formattedMessages );
 
         console.log( 'Wrote to output' );
     }
