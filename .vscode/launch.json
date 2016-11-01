@@ -7,12 +7,13 @@
             "request": "launch",
             "program": "${workspaceRoot}/run_local.js",
             "stopOnEntry": false,
-            "args": [],
+            "args": [ ],
             "cwd": "${workspaceRoot}",
             "preLaunchTask": null,
             "runtimeExecutable": null,
             "runtimeArgs": [
-                "--nolazy"
+                "--nolazy",
+                "--harmony"
             ],
             "env": {
                 "NODE_ENV": "development"

@@ -3,6 +3,10 @@ var friends = require( '../lib/friends' )
 var Q = require( "q" );
 var fs = require('fs');
 
+
+const MAX_MESSAGES = 10;
+const MESSAGES_PER_FETCH = 2;
+
 var credentials = 
 {
     email :  process.env.FACEBOOK_EMAIL,
@@ -11,22 +15,19 @@ var credentials =
 
 function getMessages(api, userid, timestamp )
 {
-    return Q.nfcall(api.getThreadHistory, userid, 0, 100, timestamp );
+    return Q.nfcall(api.getThreadHistory, userid, 0, MESSAGES_PER_FETCH, timestamp );
 }
 
-function getAllMessages(api, userid, timestamp = null, messages = []){
-    return getMessages(api, userid, timestamp)
-        .then(newMessages => {
-            if (newMessages && newMessages.length
-                && messages.length < 2000 ) 
-            {
-                console.log( `saving [${messages.length}]` );
-                messages = [ ... newMessages, ... messages ];
-                return getAllMessages( api, userid, newMessages[0].timestamp - 1, messages );
-            } else {
-                return messages;
-            }
-        });
+async function getAllMessages(api, userid, timestamp = null, allMessages = [])
+{
+    while( allMessages.length < MAX_MESSAGES )
+    {
+        let messages = await getMessages( api, userid, timestamp );
+
+        allMessages = [ ... messages, ... allMessages ];      
+        timestamp    = messages[0].timestamp - 1;
+    }
+    return allMessages;
 }
 
 facebookAPI(
@@ -35,12 +36,13 @@ facebookAPI(
 {
     if(err) return console.error(err);
 
-    friends.findFriendUserByName( api, "YOUR FRIENDS NAME HERE" )
+    friends.findFriendUserByName( api, "YOUR FRIEND HERE" )
     .then( user => 
     {
         getAllMessages( api, user.id )
         .then( messages => 
         {
+            console.log( messages );
             fs.writeFile(
                 './output.json',
                 JSON.stringify( messages, null, 4 ),
