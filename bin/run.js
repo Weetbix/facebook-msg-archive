@@ -2,8 +2,10 @@ var facebookAPI = require("facebook-chat-api");
 var Q = require( "q" );
 var fs = require('fs');
 
-var friends = require( '../lib/friends' );
-var messages = require( '../lib/messages' );
+var Friends = require( '../lib/friends' );
+var Messages = require( '../lib/messages' );
+
+const OUTPUT_FILENAME = './output.json';
 
 var credentials = 
 {
@@ -11,29 +13,20 @@ var credentials =
     password : process.env.FACEBOOK_PASSWORD
 };
 
-facebookAPI(
-    credentials,
-    (err, api) => 
-{
-    if(err) return console.error(err);
-
-    friends.findFriendUserByName( api, "YOUR FRIEND HERE" )
-    .then( user => 
+(async function(){
+    try 
     {
-        messages.getAllMessages( api, user.id )
-        .then( messages => 
-        {
-            console.log( messages );
-            fs.writeFile(
-                './output.json',
-                JSON.stringify( messages, null, 4 ),
-                err => {
-                    if( err )
-                        console.error( err );
-                    else 
-                        console.log( "wrote to output" );
-                }
-            )
-        } );
-    } );
-});
+        let api = await Q.nfcall( facebookAPI, credentials );
+        let friend = await Friends.findFriendUserByName( api, "YOUR FRIEND HERE" );
+        let messages = await Messages.getAllMessages( api, friend.id );
+
+        const formattedMessages = JSON.stringify( messages, null, 4 );
+        await Q.nfcall( fs.writeFile, OUTPUT_FILENAME, formattedMessages );
+
+        console.log( 'Wrote to output' );
+    }
+    catch( error )
+    {
+        console.error( error.error || error );
+    }
+})();
