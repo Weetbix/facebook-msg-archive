@@ -1,25 +1,35 @@
 const fs = require('fs');
+const program = require('commander');
 const MessageArchive = require('../lib/main');
 
-const OUTPUT_FILENAME = './output.json';
+program
+  .option('-o, --output [output]', 'Filename to output the messages in JSON format to, otherwise to console.')
+  .option('-e, --email <email>', 'Facebook email to use')
+  .option('-p, --password <password>', 'Facebook password to use')
+  .option('-f, --friend <friend>', 'Friend name to fetch the messages of')
+  .option('-m, --max <n>', 'Max messages to fetch', parseInt)
+  .option('-s, --silent', 'No log messages output')
+  .parse(process.argv);
 
-const credentials = {
-    email: process.env.FACEBOOK_EMAIL,
-    password: process.env.FACEBOOK_PASSWORD
-};
 
 (async function run()
 {
     try
     {
-        const messages = await MessageArchive.getMessages({
-            credentials,
-            friend_name: 'YOUR FRIEND HERE',
-            max_messages: 100
-        });
+        const config = {
+            credentials:
+            {
+                email: program.email,
+                password: program.password
+            },
+            friend_name: program.friend,
+            max_messages: program.max
+        };
+
+        const messages = await MessageArchive.getMessages(config);
 
         const formattedMessages = JSON.stringify(messages, null, 4);
-        fs.writeFileSync(OUTPUT_FILENAME, formattedMessages);
+        fs.writeFileSync(program.output, formattedMessages);
 
         console.log('Wrote to output');
     }
