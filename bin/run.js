@@ -1,9 +1,5 @@
 const fs = require('fs');
-const facebookAPI = require('facebook-chat-api');
-const Q = require('q');
-
-const Friends = require('../lib/friends');
-const Messages = require('../lib/messages');
+const MessageArchive = require('../lib/main');
 
 const OUTPUT_FILENAME = './output.json';
 
@@ -16,9 +12,11 @@ const credentials = {
 {
     try
     {
-        const api = await Q.nfcall(facebookAPI, credentials);
-        const friend = await Friends.findFriendUserByName(api, 'YOUR FRIEND HERE');
-        const messages = await Messages.getAllMessages(api, friend.id);
+        const messages = await MessageArchive.getMessages({
+            credentials,
+            friend_name: 'YOUR FRIEND HERE',
+            max_messages: 100
+        });
 
         const formattedMessages = JSON.stringify(messages, null, 4);
         fs.writeFileSync(OUTPUT_FILENAME, formattedMessages);
