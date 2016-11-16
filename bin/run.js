@@ -14,6 +14,8 @@ program
 
 (async function run()
 {
+    let messages;
+
     try
     {
         const config = {
@@ -26,15 +28,20 @@ program
             max_messages: program.max
         };
 
-        const messages = await MessageArchive.getMessages(config);
-
-        const formattedMessages = JSON.stringify(messages, null, 4);
-        fs.writeFileSync(program.output, formattedMessages);
-
-        console.log('Wrote to output');
+        messages = await MessageArchive.getMessages(config);
     }
     catch (error)
     {
         console.error(error.error || error);
+    }
+    finally
+    {
+        if (messages)
+        {
+            const formattedMessages = JSON.stringify(messages, null, 4);
+            fs.writeFileSync(program.output, formattedMessages);
+
+            console.log(`Finished writing messags to ${program.output}`);
+        }
     }
 }());

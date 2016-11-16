@@ -86,6 +86,6 @@ $RECYCLE.BIN/
 
 
 #####
-# Contains environmental keys 
+# Contains environmental keys
 run_local.js
-output.json
+ignored
