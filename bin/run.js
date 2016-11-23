@@ -8,6 +8,7 @@ program
   .option('-p, --password <password>', 'Facebook password to use')
   .option('-f, --friend <friend>', 'Friend name to fetch the messages of')
   .option('-m, --max <n>', 'Max messages to fetch', parseInt)
+  .option('-i, --images [dir]', 'Download photos from the messages to the desired location')
   .option('-s, --silent', 'No log messages output')
   .parse(process.argv);
 
@@ -25,7 +26,8 @@ program
                 password: program.password
             },
             friend_name: program.friend,
-            max_messages: program.max
+            max_messages: program.max,
+            photo_dest: program.images
         };
 
         messages = await MessageArchive.getMessages(config);
